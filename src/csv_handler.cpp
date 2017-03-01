@@ -20,22 +20,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
-
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include "kd_math.h"
 #include "csv_handler.h"
+
+#include <iostream>
 
 using namespace std;
 
-int main(int argc, char * argv[]) {
+template <typename T>
+vector<vector<T>> CsvHandler::CsvReadInput(const string& file_name) {
+    vector<vector<T>> input_points;
+    vector<T> single_point;
+    ifstream input_file(file_name);
+    string line;
+    cout << "Enetered this function" << endl;
 
-    if (argc != 4) {
-        cerr << "Invalid arguments! User entered " << argc-1 << " argument(s), but 3 are required." << endl;
-        cout << "usage: kdtree <input_file.csv> <query_file.csv> <results_file.csv>" << endl;
-        // return 0;
+    while (input_file.good() && !input_file.eof()) {
+        cout << "File is good" << endl;
+       if (!getline(input_file, line))
+           continue;
+        getline(input_file, line);
+        std::stringstream lineStream(line);
+        cout << "line is " << line << endl;
+        string cell;
+
+        // TODO: explore emplace_back for more efficiency
+
+        while(std::getline(lineStream, cell, ',')) {
+            cout << cell << "    " << std::stof(cell) << endl ;
+                        single_point.push_back(std::stof(cell));
+        }
+        std::cout << "Size of each point = " << single_point.size() << std::endl;
+        input_points.push_back(single_point);
+        single_point.clear();
     }
-    // cout << "Hello World" << endl;
-
-//    vector<vector<float>> input_data = CsvHandler::CsvReadInput(argv[1]);
-
-    return 0;
+    return input_points;
 }

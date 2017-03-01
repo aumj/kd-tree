@@ -20,22 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
+#ifndef CSV_HANDLER_H_
+#define CSV_HANDLER_H_
 
-#include "csv_handler.h"
+#include <vector>
+// #include "kd_math.hpp"
 
 using namespace std;
 
-int main(int argc, char * argv[]) {
+class CsvHandler {
+public:
+    // static vector<Point<T>> csvReadInput(const string& file_name);
+    template <typename T=float>
+    static vector<vector<T>> CsvReadInput(const string& file_name);
+    static void CsvWriteOutput();
 
-    if (argc != 4) {
-        cerr << "Invalid arguments! User entered " << argc-1 << " argument(s), but 3 are required." << endl;
-        cout << "usage: kdtree <input_file.csv> <query_file.csv> <results_file.csv>" << endl;
-        // return 0;
-    }
-    // cout << "Hello World" << endl;
+};
 
-//    vector<vector<float>> input_data = CsvHandler::CsvReadInput(argv[1]);
 
-    return 0;
-}
+
+#endif // CSV_HANDLER_H //
