@@ -24,15 +24,13 @@
 #define CSV_HANDLER_H_
 
 #include <vector>
-// #include "kd_math.hpp"
+#include "kd_math.h"
 
-using namespace std;
-
+template <typename T=double>
 class CsvHandler {
 public:
     // static vector<Point<T>> csvReadInput(const string& file_name);
-    template <typename T=float>
-    static vector<vector<T>> CsvReadInput(const string& file_name);
+    static std::vector<Point<T>> CsvReadInput(const std::string& file_name);
     static void CsvWriteOutput();
 
 };
