@@ -21,21 +21,27 @@
 // SOFTWARE.
 
 #include <iostream>
-
+#include <string>
+#include "kd_math.h"
 #include "csv_handler.h"
+#include "kd_tree.h"
 
 using namespace std;
 
 int main(int argc, char * argv[]) {
 
-    if (argc != 4) {
-        cerr << "Invalid arguments! User entered " << argc-1 << " argument(s), but 3 are required." << endl;
-        cout << "usage: kdtree <input_file.csv> <query_file.csv> <results_file.csv>" << endl;
+//    if (argc != 4) {
+//        cerr << "Invalid arguments! User entered " << argc-1 << " argument(s), but 3 are required." << endl;
+//        cout << "usage: kdtree <input_file.csv> <query_file.csv> <results_file.csv>" << endl;
         // return 0;
-    }
-    // cout << "Hello World" << endl;
+//    }
+     cout << "Hello World" << endl;
 
-//    vector<vector<float>> input_data = CsvHandler::CsvReadInput(argv[1]);
+    string s = argv[1];
+    vector<Point<double>*> input_data = CsvHandler<double>::CsvReadInput(s);
+    cout << "CSV Parsing complete" << endl << "Building KD-Tree..." << endl;
+    KdTree<double> tree = KdTree<double>::buildKdTree(input_data);
+    cout << "KD-Tree built!" << endl;
 
     return 0;
 }

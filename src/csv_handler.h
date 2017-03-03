@@ -30,11 +30,11 @@ template <typename T=double>
 class CsvHandler {
 public:
     // static vector<Point<T>> csvReadInput(const string& file_name);
-    static std::vector<Point<T>> CsvReadInput(const std::string& file_name);
+    static std::vector<Point<T>*> CsvReadInput(const std::string& file_name);
     static void CsvWriteOutput();
 
 };
 
-
+//#include "csv_handler.cpp"
 
 #endif // CSV_HANDLER_H //

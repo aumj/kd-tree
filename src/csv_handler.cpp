@@ -20,6 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef CSV_HANDLER_CPP_
+#define CSV_HANDLER_CPP_
+
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -32,30 +35,38 @@
 using namespace std;
 
 template <typename T>
-vector<Point<T>> CsvHandler<T>::CsvReadInput(const string& file_name) {
-    vector<Point<T>> input_points;
+vector<Point<T>*> CsvHandler<T>::CsvReadInput(const string& file_name) {
+    vector<Point<T>*> input_points;
     vector<T> single_point;
     ifstream input_file(file_name);
     string line;
-    cout << "Entered CSV function" << endl;
+    int line_count = 0;
+//    cout << "Entered CSV function" << endl;
 
     while (input_file.good() && !input_file.eof()) {
-        cout << "File is good" << endl;
+//        cout << "File is good" << endl;
        if (!getline(input_file, line))
            continue;
         getline(input_file, line);
         stringstream lineStream(line);
-        cout << "line is " << line << endl;
+//        cout << "line is " << line << endl;
         string cell;
 
         // TODO: explore emplace_back for more efficiency
         while(getline(lineStream, cell, ',')) {
-            cout << cell << "    " << stof(cell) << endl ;
-                        single_point.push_back(T(stod(cell)));
+//            cout << cell << "    " << stof(cell) << endl ;
+            single_point.push_back(T(stod(cell)));
         }
-        cout << "Size of each point = " << single_point.size() << endl;
-        input_points.push_back(Point<T>(single_point));
+//        cout << "Size of each point = " << single_point.size() << endl;
+        Point<T>* pt = new Point<T>(single_point, line_count);
+        input_points.push_back(pt);
         single_point.clear();
+        ++line_count;
     }
     return input_points;
 }
+
+template class CsvHandler<float>;
+template class CsvHandler<double>;
+
+#endif // CSV_HANDLER_CPP //

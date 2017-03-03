@@ -68,12 +68,33 @@ template <typename T = double>
 bool operator!= (const Point<T>& pt1, const Point<T>& pt2);
 
 template <typename T = double>
-std::vector<T> operator+ (const Point<T>& pt1, const Point<T>& pt2);
+Point<T> operator+ (const Point<T>& pt1, const Point<T>& pt2);
 
 template <typename T = double>
-std::vector<T> operator- (const Point<T>& pt1, const Point<T>& pt2);
+Point<T> operator- (const Point<T>& pt1, const Point<T>& pt2);
+
+template <typename T = double>
+Point<T> operator* (const Point<T>& pt1, const Point<T>& pt2);
+    
+template <typename T = double>
+Point<T> operator/ (const Point<T>& pt1, const Point<T>& pt2);
+
+template <typename T = double>
+Point<T> elemwiseMin (const Point<T>& pt1, const Point<T>& pt2);
+
+template <typename T = double>
+Point<T> elemwiseMax (const Point<T>& pt1, const Point<T>& pt2);
 
 
+template <typename T = double>
+std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*> data);
+
+template <typename T = double>
+T getApproxMedian(const std::vector<Point<T>*> data, const size_t& split_axis,
+                         const Point<T>& data_mean, const Point<T>& data_variance);
+
+
+#include "kd_math.cpp"
 
 #endif // KD_MATH_H_ //
 
