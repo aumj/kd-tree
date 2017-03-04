@@ -63,13 +63,19 @@ Point<T> KdTree<T>::getPivot(const vector<Point<T>*>& input_points, const size_t
 template <typename T>
 shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_points, const size_t depth) {
     
+    if (input_points.size() == 0) {
+        cout << "No points!" << endl;
+        return nullptr;
+    }
     if (input_points.size() == 1) {
         shared_ptr<KdTreeNode<T>> leaf = make_shared<KdTreeNode<T>>(depth);
+        leaf->point = *input_points[0];
         return leaf;
     }
-    cout << "Depth = " << depth << endl << "Point (x) = " << *input_points[0]->begin();
+    cout << "Depth = " << depth << endl << "Point (x) = " << *input_points[0]->begin() << endl;
 
     shared_ptr<KdTreeNode<T>> root = make_shared<KdTreeNode<T>>();
+//    shared_ptr<KdTreeNode<T>> root(new KdTreeNode<T>);
     root->depth = depth;
     
     
@@ -96,7 +102,6 @@ shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_po
     root->right_child = KdTree<T>::treeBuild(r_subset, depth+1);
     
     return root;
-
 }
 
 template <typename T>
@@ -105,7 +110,6 @@ KdTree<T> KdTree<T>::buildKdTree(const std::vector<Point<T>*>& input_points) {
     KdTree<T> tree(root_node);
     return tree;
 }
-
 
 template class KdTree<float>;
 template class KdTreeNode<float>;

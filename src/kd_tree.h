@@ -27,8 +27,7 @@
 #include "kd_math.h"
 
 template <typename T=double>
-class KdTreeNode {
-public:
+struct KdTreeNode {
     size_t depth;
     size_t split_axis;
     T split_position;

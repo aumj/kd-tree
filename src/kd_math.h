@@ -87,10 +87,10 @@ Point<T> elemwiseMax (const Point<T>& pt1, const Point<T>& pt2);
 
 
 template <typename T = double>
-std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*> data);
+std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data);
 
 template <typename T = double>
-T getApproxMedian(const std::vector<Point<T>*> data, const size_t& split_axis,
+T getApproxMedian(const std::vector<Point<T>*>& data, const size_t& split_axis,
                          const Point<T>& data_mean, const Point<T>& data_variance);
 
 

@@ -31,6 +31,8 @@
 #include <vector>
 #include <cassert>
 
+#include <iostream>
+
 using namespace std;
 
 template <typename T>
@@ -179,7 +181,7 @@ Point<T> elemwiseMax (const Point<T>& pt1, const Point<T>& pt2){
 
 
 template <typename T>
-std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*> data) {
+std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) {
     typename vector<Point<T>*>::const_iterator iter;
 
     size_t dimension = (*data.begin())->getDimension();
@@ -217,27 +219,33 @@ std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*> data) {
 
 
 template <typename T>
-T getApproxMedian(const std::vector<Point<T>*> data, const size_t& split_axis,
-                          const Point<T>& data_mean, const Point<T>& data_variance) {
+T getApproxMedian(const vector<Point<T>*>& data, const size_t& split_axis,
+                  const Point<T>& data_mean, const Point<T>& data_variance) {
     
     T mean = data_mean[split_axis];
     T std_deviation = std::sqrt(data_variance[split_axis]);
     T lower_limit = mean - std_deviation;
-//    T higher_limit = mean + std_deviation;
     size_t sample_count = data.size();
+    
+    if (sample_count <= 2) {
+        cout << "<2 pts for median-  " << sample_count << endl;
+        vector<T> test = (*data.begin())->getPointVector();
+        return test[split_axis];
+    }
     
     int bin_id;
     int bin_count = 128;
-    T bin_size = 2*std_deviation/bin_count;
+    T bin_size = (2*std_deviation)/bin_count;
     vector<int> histogram(bin_count,0);
+    vector<T> sample;
     
     typename vector<Point<T>*>::const_iterator iter;
     for (iter = data.begin(); iter != data.end(); ++iter) {
-        vector<T> sample = (*iter)->getPointVector();
+        sample = (*iter)->getPointVector();
         bin_id = std::round((sample[split_axis]-lower_limit) / bin_size);
         if (bin_id < 0)
             bin_id = 0;
-        else if (bin_id > bin_count)
+        else if (bin_id > bin_count-1)
             bin_id = bin_count-1;
         ++histogram[bin_id];
     }
@@ -245,7 +253,7 @@ T getApproxMedian(const std::vector<Point<T>*> data, const size_t& split_axis,
     int lower_half = 0;
     int median_bin;
     for (median_bin = 0; median_bin < histogram.size(); ++median_bin ) {
-        lower_half += histogram[median_bin];
+        lower_half += *(histogram.begin()+median_bin);
         if (lower_half > sample_count/2)
             break;
     }
