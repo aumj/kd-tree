@@ -35,7 +35,7 @@
 using namespace std;
 
 template <typename T>
-vector<Point<T>*> CsvHandler<T>::CsvReadInput(const string& file_name) {
+vector<Point<T>*> CsvHandler<T>::csvReadInput(const string& file_name) {
     vector<Point<T>*> input_points;
     vector<T> single_point;
     ifstream input_file(file_name);
@@ -63,8 +63,25 @@ vector<Point<T>*> CsvHandler<T>::CsvReadInput(const string& file_name) {
         single_point.clear();
         ++line_count;
     }
+    input_file.close();
     return input_points;
 }
+
+template <typename T>
+void CsvHandler<T>::csvWriteNnResults(const vector<size_t>& pointId,
+                                      const vector<T>& dist,
+                                      const string& file_name) {
+    
+    cout << "Writing search results to "<< file_name << endl;
+    ofstream output_file(file_name);
+    
+    auto iter_d = dist.begin();
+    for (auto iter_pt = pointId.begin(); iter_pt != pointId.end(); ++iter_pt, ++iter_d) {
+        output_file << *iter_pt << "," << *iter_d << endl;
+    }
+    output_file.close();
+}
+
 
 template class CsvHandler<float>;
 template class CsvHandler<double>;

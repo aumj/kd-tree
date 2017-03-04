@@ -57,8 +57,6 @@ public:
 
     size_t getDimension() const;
     
-    T getDistance(const Point<T>& pt1, const Point<T>& pt2);
-    
 };
 
 template <typename T = double>
@@ -85,6 +83,8 @@ Point<T> elemwiseMin (const Point<T>& pt1, const Point<T>& pt2);
 template <typename T = double>
 Point<T> elemwiseMax (const Point<T>& pt1, const Point<T>& pt2);
 
+template <typename T = double>
+T getDistance(const Point<T>& pt1, const Point<T>& pt2);
 
 template <typename T = double>
 std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data);

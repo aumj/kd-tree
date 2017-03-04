@@ -24,13 +24,22 @@
 #define KD_TREE_CPP_
 
 #include <vector>
+#include <limits>
 #include "kd_math.h"
 #include "kd_tree.h"
+#include "csv_handler.h"
+
 #include <iostream>
+
 using namespace std;
 
 template <typename T>
-KdTree<T>::KdTree(const std::shared_ptr<KdTreeNode<T>> root_node) : root_(root_node) {}
+KdTree<T>::KdTree(const shared_ptr<KdTreeNode<T>> root_node) : root_(root_node) {}
+
+template <typename T>
+KdTreeNode<T> KdTree<T>::getRootNode() const {
+    return *root_;
+}
 
 template <typename T>
 KdTree<T> KdTree<T>::getLeftSubtree() const {
@@ -44,7 +53,7 @@ KdTree<T> KdTree<T>::getRightSubtree() const {
 
 // Choose splitting axis depending on policy
 template <typename T>
-size_t KdTree<T>::getSplitAxis(const std::vector<Point<T>>& distro_params, const size_t& depth) {
+size_t KdTree<T>::getSplitAxis(const vector<Point<T>>& distro_params, const size_t& depth) {
     // TODO: implement other splitting methods
     
     size_t dimensions = distro_params[0].getDimension();
@@ -85,11 +94,9 @@ shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_po
     root->split_axis = KdTree<T>::getSplitAxis(distro_params, depth); // TODO: FIX THIS!!!!!
     root->split_position =  getApproxMedian(input_points, root->split_axis,
                                            distro_params[3], distro_params[4]);
-//    TODO: Fix getPivot linker error
     root->point = KdTree<T>::getPivot(input_points, root->split_axis, root->split_position);
     
     vector<Point<T>*> l_subset, r_subset;
-//    for (auto pt : input_points) {
     for (auto iter = input_points.begin()+1; iter != input_points.end(); ++iter) {
         vector<T> pt_vect = (*iter)->getPointVector();
         if (pt_vect[root->split_axis] < root->split_position)
@@ -105,11 +112,61 @@ shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_po
 }
 
 template <typename T>
-KdTree<T> KdTree<T>::buildKdTree(const std::vector<Point<T>*>& input_points) {
+KdTree<T> KdTree<T>::buildKdTree(const vector<Point<T>*>& input_points) {
     shared_ptr<KdTreeNode<T>> root_node = treeBuild(input_points,0);
     KdTree<T> tree(root_node);
     return tree;
 }
+
+template <typename T>
+void KdTree<T>::queryKdTree(const KdTree<T>& tree, const vector<Point<T>*>& query_points) {
+    vector<size_t> pointId;
+    pointId.reserve(query_points.size());
+    vector<T> dist;
+    dist.reserve(query_points.size());
+    for (auto iter = query_points.begin(); iter != query_points.end(); ++iter) {
+        shared_ptr<KdTreeNode<T>> bestNodePtr = make_shared<KdTreeNode<T>>();
+        shared_ptr<T> bestDistPtr = make_shared<T>(numeric_limits<T>::max());
+        KdTree<T>::getNearestNeighbor(tree.getRootNode(), **iter, bestNodePtr, bestDistPtr);
+        pointId.push_back((bestNodePtr->point).getIndex());
+        dist.push_back(*bestDistPtr);
+//        cout << "NN ID is " << (bestNodePtr->point).getIndex() << ", d=" << *bestDistPtr <<endl;
+    }
+    CsvHandler<T>::csvWriteNnResults(pointId, dist);
+}
+
+template <typename T>
+void KdTree<T>::getNearestNeighbor(const KdTreeNode<T>& node,
+                                   const Point<T>& query,
+                                   const shared_ptr<KdTreeNode<T>>& bestNode,
+                                   const shared_ptr<T>& bestDist) {
+
+    T distance = getDistance(node.point, query);
+    if (distance < *bestDist) {
+        *bestNode = node;
+        *bestDist = distance;
+    }
+    if (node.isLeaf())
+        return;
+
+    
+    if (query[node.split_axis] < node.split_position && node.left_child != nullptr) {
+        getNearestNeighbor(*(node.left_child), query, bestNode, bestDist);
+        if (abs(node.split_position - query[node.split_axis]) < *bestDist && node.right_child != nullptr) {
+            getNearestNeighbor(*(node.right_child), query, bestNode, bestDist);
+        }
+    }
+    else if (node.right_child != nullptr) {
+        getNearestNeighbor(*(node.right_child), query, bestNode, bestDist);
+        if (abs(node.split_position - query[node.split_axis]) < *bestDist  && node.left_child != nullptr) {
+            getNearestNeighbor(*(node.left_child), query, bestNode, bestDist);
+        }
+    }
+}
+
+
+
+
 
 template class KdTree<float>;
 template class KdTreeNode<float>;

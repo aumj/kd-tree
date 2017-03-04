@@ -58,24 +58,29 @@ private:
     enum SplitPosition {spatialMedian, objectMedian};
 public:
     
-    
     KdTree() = default;
     KdTree(const std::shared_ptr<KdTreeNode<T>> root_node);
     ~KdTree() = default;
     
+    KdTreeNode<T> getRootNode() const;
     KdTree<T> getLeftSubtree() const;
     KdTree<T> getRightSubtree() const;
     bool isEmpty() const;
     
     // TODo: make sure all functions are defined in cpp file
     static KdTree<T> buildKdTree(const std::vector<Point<T>*>& input_points);
-    static shared_ptr<KdTreeNode<T>> treeBuild(const std::vector<Point<T>*>& input_points, const size_t depth);
-    static size_t getSplitAxis(const std::vector<Point<T>>& distro_params, const size_t& depth); // TODO: Fix this!
+    static shared_ptr<KdTreeNode<T>> treeBuild(const std::vector<Point<T>*>& input_points,
+                                                            const size_t depth);
+    static size_t getSplitAxis(const std::vector<Point<T>>& distro_params,
+                                                           const size_t& depth); // TODO: Fix this!
     static Point<T> getPivot(const std::vector<Point<T>*>& input_points,
                              const size_t& split_axis, const T& split_position);
     
-    static void queryKdTree() {};
-    static KdTreeNode<T> getNearestNeighbor();
+    static void queryKdTree(const KdTree<T>& tree, const std::vector<Point<T>*>& query_points);
+    static void getNearestNeighbor(const KdTreeNode<T>& node,
+                                   const Point<T>& query,
+                                   const std::shared_ptr<KdTreeNode<T>>& bestNode,
+                                   const std::shared_ptr<T>& bestDist);
     
 };
 

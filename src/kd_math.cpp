@@ -88,17 +88,6 @@ T Point<T>::operator[] (size_t index) const {
     return point_vect_[index];
 }
 
-
-template <typename T>
-T Point<T>::getDistance(const Point<T>& pt1, const Point<T>& pt2) {
-    Point<T> d = pt1 - pt2;
-    vector<T> diff = d.getPointVector();
-//    vector<T> diff = pt1 - pt2;
-//    vector<T> diff = (pt1 - pt2).getPointVector();
-    T dist = sqrt(inner_product(diff.begin(), diff.end(), diff.begin(), 0 ));
-    return dist;
-}
-
 template <typename T>
 bool operator== (const Point<T>& pt1, const Point<T>& pt2) {
     return equal(pt1.begin(), pt1.end(), pt2.begin());
@@ -179,6 +168,13 @@ Point<T> elemwiseMax (const Point<T>& pt1, const Point<T>& pt2){
     return Point<T>(elem_max);
 }
 
+template <typename T>
+T getDistance(const Point<T>& pt1, const Point<T>& pt2) {
+    Point<T> d = pt1 - pt2;
+    vector<T> diff = d.getPointVector();
+    T dist = sqrt(inner_product(diff.begin(), diff.end(), diff.begin(), T(0.0)));
+    return dist;
+}
 
 template <typename T>
 std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) {

@@ -29,10 +29,10 @@
 template <typename T=double>
 class CsvHandler {
 public:
-    // static vector<Point<T>> csvReadInput(const string& file_name);
-    static std::vector<Point<T>*> CsvReadInput(const std::string& file_name);
-    static void CsvWriteOutput();
-
+    static std::vector<Point<T>*> csvReadInput(const std::string& file_name);
+    static void csvWriteNnResults(const std::vector<size_t>& pointId,
+                                  const std::vector<T>& dist,
+                                  const std::string& file_name="query_results.csv");
 };
 
 //#include "csv_handler.cpp"

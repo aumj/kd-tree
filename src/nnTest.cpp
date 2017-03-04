@@ -20,36 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <iostream>
-#include <string>
+#include <vector>
+#include <numeric>
 #include "kd_math.h"
 #include "csv_handler.h"
-#include "kd_tree.h"
-
-#include "nnTest.cpp"
 
 using namespace std;
 
-int main(int argc, char * argv[]) {
-
-//    if (argc != 4) {
-//        cerr << "Invalid arguments! User entered " << argc-1 << " argument(s), but 3 are required." << endl;
-//        cout << "usage: kdtree <input_file.csv> <query_file.csv> <results_file.csv>" << endl;
-        // return 0;
-//    }
-
-    vector<Point<double>*> input_data = CsvHandler<double>::csvReadInput(argv[1]);
-    cout << "CSV Parsing complete" << endl << "Building KD-Tree..." << endl;
-    KdTree<double> tree = KdTree<double>::buildKdTree(input_data);
-    cout << "KD-Tree built!" << endl;
-    
-    cout << "Reading query data" << endl;
-    vector<Point<double>*> query_data = CsvHandler<double>::csvReadInput(argv[2]);
-    cout << "Finding nearest neighbors..." << endl;
-    KdTree<double>::queryKdTree(tree, query_data);
-    
-    cout << "Finding nearest neighbors using brute force..." << endl;
-    nnBruteForce(query_data, input_data);
-    
-    return 0;
+template <typename T>
+void nnBruteForce(const vector<Point<T>*>& query_points, vector<Point<T>*>& sample_points) {
+    vector<size_t> pointId;
+    pointId.reserve(query_points.size());
+    vector<T> dist;
+    dist.reserve(query_points.size());
+    for (auto iter1 = query_points.begin(); iter1 != query_points.end(); ++iter1) {
+//        Point<T> query = *iter1;
+        size_t bestNode = numeric_limits<size_t>::max();
+        T bestDist = numeric_limits<T>::max();
+        for(auto iter2 = sample_points.begin(); iter2 != sample_points.end(); ++iter2) {
+            T dist = getDistance(**iter1, **iter2);
+            if (dist < bestDist){
+                bestNode = (**iter2).getIndex();
+                bestDist = dist;
+            }
+        }
+        pointId.push_back(bestNode);
+        dist.push_back(bestDist);
+    }
+    CsvHandler<T>::csvWriteNnResults(pointId, dist, "query_results_truth.csv");
 }
+
+
+
