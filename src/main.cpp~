@@ -31,14 +31,14 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
 
-    if (strcmp(argv[1], "--build")==0 && argc==3) {
+    if (strcmp(argv[1], "-build")==0 && argc==3) {
         vector<Point<double>*> input_data = FileHandler<double>::csvReadInput(argv[2]);
         cout << "CSV Parsing complete" << endl << "Building KD-Tree..." << endl;
         KdTree<double> tree = KdTree<double>::buildKdTree(input_data);
         cout << "KD-Tree built!" << endl;
         KdTree<double>::WriteKDTreeToFile(tree);
     }
-    else if (strcmp(argv[1], "--query")==0 && argc >= 3) {
+    else if (strcmp(argv[1], "-query")==0 && argc >= 3) {
         KdTree<double> saved_tree;
         if (argc == 4)
             KdTree<double>::ReadKDTreeFromFile(saved_tree, argv[3]);
@@ -55,17 +55,17 @@ int main(int argc, char * argv[]) {
         nnBruteForce(query_data, input_data);
         cout << "Done";
     }
-    else if (strcmp(argv[1], "--help")==0) {
+    else if (strcmp(argv[1], "-help")==0) {
         cout << "///////////////////////////////////////////////////////////" << endl;
         cout << "KD-Tree Library" << endl << "Copyright (c) 2017 Aum Jadhav" << endl << endl;
         cout << "Usage:" << endl;
-        cout << "1. Build KD-Tree: ./KD-Tree --build <path/input_file.csv>" << endl;
+        cout << "1. Build KD-Tree: KDTree -build <path/input_file.csv>" << endl;
         cout << "2. Query KD-Tree for Nearest Neighbors: ";
-        cout << "./KD-Tree --query <path/query_file.csv> <path/tree.json>(optional, default=data/sample_tree.json)" << endl;
+        cout << "KDTree -query <path/query_file.csv> <path/tree.json>(optional, default=data/sample_tree.json)" << endl;
         cout << "///////////////////////////////////////////////////////////" << endl;
     }
     else {
-        cerr << "Invalid options and/or arguments! Check usage using: $./KDTree --help" << endl;
+        cerr << "Invalid options and/or arguments! Check usage using: $./KDTree -help" << endl;
     }
 
 

@@ -61,6 +61,7 @@ KdTree<T> KdTree<T>::getRightSubtree() const {
 template <typename T>
 size_t KdTree<T>::getSplitAxis(const vector<Point<T>>& distro_params,
                                const size_t& depth) {
+    // TODO: implement other splitting methods
 
     size_t split_axis;
     switch(KdTree<T>::split_method_) {

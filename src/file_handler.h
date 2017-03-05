@@ -20,35 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef FILE_HANDLER_H_
+#define FILE_HANDLER_H_
+
 #include <vector>
-#include <numeric>
 #include "kd_math.h"
-#include "csv_handler.h"
 
-using namespace std;
+template <typename T=double>
+class FileHandler {
+public:
+    static std::vector<Point<T>*> csvReadInput(const std::string& file_name="data/sample_data.csv");
+    static void csvWriteNnResults(const std::vector<size_t>& pointId,
+                                  const std::vector<T>& dist,
+                                  const std::string& file_name="query_results.csv");
+};
 
-template <typename T>
-void nnBruteForce(const vector<Point<T>*>& query_points, vector<Point<T>*>& sample_points) {
-    vector<size_t> pointId;
-    pointId.reserve(query_points.size());
-    vector<T> dist;
-    dist.reserve(query_points.size());
-    for (auto iter1 = query_points.begin(); iter1 != query_points.end(); ++iter1) {
-//        Point<T> query = *iter1;
-        size_t bestNode = numeric_limits<size_t>::max();
-        T bestDist = numeric_limits<T>::max();
-        for(auto iter2 = sample_points.begin(); iter2 != sample_points.end(); ++iter2) {
-            T dist = getDistance(**iter1, **iter2);
-            if (dist < bestDist){
-                bestNode = (**iter2).getIndex();
-                bestDist = dist;
-            }
-        }
-        pointId.push_back(bestNode);
-        dist.push_back(bestDist);
-    }
-    CsvHandler<T>::csvWriteNnResults(pointId, dist, "query_results_truth.csv");
-}
-
-
-
+#endif // FILE_HANDLER_H //

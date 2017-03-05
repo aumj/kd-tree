@@ -30,8 +30,7 @@
 #include <cmath>
 #include <vector>
 #include <cassert>
-
-#include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -117,9 +116,6 @@ Point<T> operator- (const Point<T>& pt1, const Point<T>& pt2) {
     pt_diff.reserve(pt1.getDimension());
     transform(p1.begin(), p1.end(), p2.begin(),
                   back_inserter(pt_diff), std::minus<T>());
-
-    //    transform(pt1.begin(), pt1.end(), pt2.begin(),
-//              back_inserter(pt_diff), std::minus<T>());
     return Point<T>(pt_diff);
 }
 
@@ -184,14 +180,14 @@ std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) 
     size_t data_size = data.size();
     vector<T> zeros(dimension, 0);
     vector<T> total_pts(dimension, data_size);
-    
+
     Point<T> data_min((*data.begin())->getPointVector());
     Point<T> data_max((*data.begin())->getPointVector());
     Point<T> data_range(zeros);
     Point<T> data_mean(zeros);
     Point<T> data_variance(zeros);
     Point<T> total_points(total_pts);
-    
+
     // Calculate Min, Max and Mean of each dimension of the dataset
     for (iter = data.begin(); iter != data.end(); ++iter) {
         data_mean = data_mean + (**iter);
@@ -200,16 +196,16 @@ std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) 
     }
     data_mean = data_mean / total_points;
     data_range = data_max - data_min;
-    
+
     // Calculate variance of the dataset
     for (iter = data.begin(); iter != data.end(); ++iter) {
         data_variance = data_variance + ((**iter - data_mean)*(**iter - data_mean));
     }
     data_variance = data_variance/total_points;
-    
+
     vector<Point<T>> distro_params = {data_min, data_max, data_range, data_mean,
                                                                 data_variance};
-    
+
     return distro_params;
 }
 
@@ -217,24 +213,23 @@ std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) 
 template <typename T>
 T getApproxMedian(const vector<Point<T>*>& data, const size_t& split_axis,
                   const Point<T>& data_mean, const Point<T>& data_variance) {
-    
+
     T mean = data_mean[split_axis];
     T std_deviation = std::sqrt(data_variance[split_axis]);
     T lower_limit = mean - std_deviation;
     size_t sample_count = data.size();
-    
+
     if (sample_count <= 2) {
-        cout << "<2 pts for median-  " << sample_count << endl;
         vector<T> test = (*data.begin())->getPointVector();
         return test[split_axis];
     }
-    
+
     int bin_id;
     int bin_count = 128;
     T bin_size = (2*std_deviation)/bin_count;
     vector<int> histogram(bin_count,0);
     vector<T> sample;
-    
+
     typename vector<Point<T>*>::const_iterator iter;
     for (iter = data.begin(); iter != data.end(); ++iter) {
         sample = (*iter)->getPointVector();
@@ -245,7 +240,7 @@ T getApproxMedian(const vector<Point<T>*>& data, const size_t& split_axis,
             bin_id = bin_count-1;
         ++histogram[bin_id];
     }
-    
+
     int lower_half = 0;
     int median_bin;
     for (median_bin = 0; median_bin < histogram.size(); ++median_bin ) {
@@ -263,12 +258,3 @@ template class Point<double>;
 
 
 #endif // KD_MATH_CPP_ //
-
-
-
-
-
-
-
-
-

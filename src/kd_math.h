@@ -24,12 +24,15 @@
 #define KD_MATH_H_
 
 #include <vector>
+#include <stddef.h>
+#include <cereal/cereal.hpp>
+#include <cereal/types/vector.hpp>
 
 template <class T = double>
 class Point{
 private:
-    size_t index_;
     std::vector<T> point_vect_;
+    size_t index_;
 public:
     // Constructors/Destructor
     Point() = default;
@@ -49,14 +52,19 @@ public:
     // Overloaded operators for Point type
     T& operator[] (size_t index);
     T operator[] (size_t index) const;
-    
+
     // Functions
     std::vector<T> getPointVector() const;
-    
+
     size_t getIndex() const;
 
     size_t getDimension() const;
-    
+
+    template<class Archive>
+    void serialize(Archive & archive) {
+			archive(CEREAL_NVP(point_vect_), CEREAL_NVP(index_));
+    }
+
 };
 
 template <typename T = double>
@@ -73,7 +81,7 @@ Point<T> operator- (const Point<T>& pt1, const Point<T>& pt2);
 
 template <typename T = double>
 Point<T> operator* (const Point<T>& pt1, const Point<T>& pt2);
-    
+
 template <typename T = double>
 Point<T> operator/ (const Point<T>& pt1, const Point<T>& pt2);
 
