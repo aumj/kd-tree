@@ -59,9 +59,9 @@ int main(int argc, char * argv[]) {
         cout << "///////////////////////////////////////////////////////////" << endl;
         cout << "KD-Tree Library" << endl << "Copyright (c) 2017 Aum Jadhav" << endl << endl;
         cout << "Usage:" << endl;
-        cout << "1. Build KD-Tree: ./KD-Tree --build <path/input_file.csv>" << endl;
+        cout << "1. Build KD-Tree: ./KDTree --build <path/input_file.csv>" << endl;
         cout << "2. Query KD-Tree for Nearest Neighbors: ";
-        cout << "./KD-Tree --query <path/query_file.csv> <path/tree.json>(optional, default=data/sample_tree.json)" << endl;
+        cout << "./KDTree --query <path/query_file.csv> <path/tree.json>(optional, default=data/sample_tree.json)" << endl;
         cout << "///////////////////////////////////////////////////////////" << endl;
     }
     else {
