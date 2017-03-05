@@ -211,9 +211,9 @@ void KdTree<T>::ReadKDTreeFromFile(KdTree<T>& tree, const string& file) {
 }
 
 template class KdTree<float>;
-template class KdTreeNode<float>;
+template struct KdTreeNode<float>;
 template class KdTree<double>;
-template class KdTreeNode<double>;
+template struct KdTreeNode<double>;
 
 
 #endif /* KD_TREE_CPP_ */
