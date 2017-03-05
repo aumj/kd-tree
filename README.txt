@@ -46,7 +46,8 @@ Output file "tree.json" is generated
 
 	$ ./KDTree --query <path/query_file.csv> <path/tree.json>(optional)
 
-If tree file is not entered, the default "./data/sample_tree.json" is used. Output files "query_results.csv" and "query_results_truth.csv" are generated.
+If tree file is not entered, the default "./data/sample_tree.json" is used. 
+Output files "query_results.csv" and "query_results_truth.csv" are generated.
 
 
 
