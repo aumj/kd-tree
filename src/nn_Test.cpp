@@ -27,6 +27,8 @@
 
 using namespace std;
 
+// Function for finding the nearest neighbor using brute force
+
 template <typename T>
 void nnBruteForce(const vector<Point<T>*>& query_points, vector<Point<T>*>& sample_points) {
     vector<size_t> pointId;
@@ -48,6 +50,3 @@ void nnBruteForce(const vector<Point<T>*>& query_points, vector<Point<T>*>& samp
     }
     FileHandler<T>::csvWriteNnResults(pointId, dist, "query_results_truth.csv");
 }
-
-
-

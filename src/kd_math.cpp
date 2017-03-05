@@ -172,6 +172,8 @@ T getDistance(const Point<T>& pt1, const Point<T>& pt2) {
     return dist;
 }
 
+// Properties of a set of Points for each dimension
+// Output parameters are {min, max, range, mean, variance};
 template <typename T>
 std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) {
     typename vector<Point<T>*>::const_iterator iter;
@@ -209,7 +211,7 @@ std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data) 
     return distro_params;
 }
 
-
+// Calculates the approximate median using binapprox algorithm
 template <typename T>
 T getApproxMedian(const vector<Point<T>*>& data, const size_t& split_axis,
                   const Point<T>& data_mean, const Point<T>& data_variance) {
@@ -224,6 +226,7 @@ T getApproxMedian(const vector<Point<T>*>& data, const size_t& split_axis,
         return test[split_axis];
     }
 
+    // Build histrogram for the Point distribution
     int bin_id;
     int bin_count = 128;
     T bin_size = (2*std_deviation)/bin_count;

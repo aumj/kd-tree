@@ -29,7 +29,11 @@
 template <typename T=double>
 class FileHandler {
 public:
+    // Reads input file and stores data as a vector of Points
     static std::vector<Point<T>*> csvReadInput(const std::string& file_name="data/sample_data.csv");
+
+    // Writes Nearest-Neighbor search results to file
+    // in the format: point_index,distance
     static void csvWriteNnResults(const std::vector<size_t>& pointId,
                                   const std::vector<T>& dist,
                                   const std::string& file_name="query_results.csv");

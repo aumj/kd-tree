@@ -35,6 +35,8 @@
 
 using namespace std;
 
+// SET SPLITTING AXIS POLICY HERE
+// Options are {CYCLE, VARIANCE, RANGE}
 template <typename T>
 typename KdTree<T>::SplitMethod_t KdTree<T>::split_method_ = SplitMethod_t::VARIANCE;
 
@@ -55,7 +57,6 @@ template <typename T>
 KdTree<T> KdTree<T>::getRightSubtree() const {
     return KdTree<T>(root_->right_child);
 }
-
 
 // Choose splitting axis depending on policy
 template <typename T>
@@ -101,8 +102,8 @@ Point<T> KdTree<T>::getPivot(const vector<Point<T>*>& input_points, const size_t
 }
 
 template <typename T>
-shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_points, const size_t depth) {
-
+shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_points,
+                                               const size_t depth) {
 
     if (input_points.size() == 0) {
         return nullptr;
@@ -124,6 +125,7 @@ shared_ptr<KdTreeNode<T>> KdTree<T>::treeBuild(const vector<Point<T>*>& input_po
                                            distro_params[3], distro_params[4]);
     root->point = KdTree<T>::getPivot(input_points, root->split_axis, root->split_position);
 
+    // Split data into halfspaces
     vector<Point<T>*> l_subset, r_subset;
     for (auto iter = input_points.begin()+1; iter != input_points.end(); ++iter) {
         vector<T> pt_vect = (*iter)->getPointVector();
@@ -176,16 +178,18 @@ void KdTree<T>::getNearestNeighbor(const KdTreeNode<T>& node,
     if (node.isLeaf())
         return;
 
-
+    // Recursively compare nodes and find nearest neighbor
     if (query[node.split_axis] < node.split_position && node.left_child != nullptr) {
         getNearestNeighbor(*(node.left_child), query, bestNode, bestDist);
-        if (abs(node.split_position - query[node.split_axis]) < *bestDist && node.right_child != nullptr) {
+        if (abs(node.split_position - query[node.split_axis]) < *bestDist
+            && node.right_child != nullptr) {
             getNearestNeighbor(*(node.right_child), query, bestNode, bestDist);
         }
     }
     else if (node.right_child != nullptr) {
         getNearestNeighbor(*(node.right_child), query, bestNode, bestDist);
-        if (abs(node.split_position - query[node.split_axis]) < *bestDist  && node.left_child != nullptr) {
+        if (abs(node.split_position - query[node.split_axis]) < *bestDist
+            && node.left_child != nullptr) {
             getNearestNeighbor(*(node.left_child), query, bestNode, bestDist);
         }
     }

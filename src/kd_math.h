@@ -28,11 +28,14 @@
 #include <cereal/cereal.hpp>
 #include <cereal/types/vector.hpp>
 
+// This file provides all the support classes and methods
+// for using K-dimensional points
+
 template <class T = double>
 class Point{
 private:
-    std::vector<T> point_vect_;
-    size_t index_;
+    std::vector<T> point_vect_; // K-d point vector
+    size_t index_;              // Index of point in input file
 public:
     // Constructors/Destructor
     Point() = default;
@@ -49,23 +52,26 @@ public:
     const_iterator begin() const;
     const_iterator end() const;
 
-    // Overloaded operators for Point type
+    // Overloaded operators[] for accessing individual elements
     T& operator[] (size_t index);
     T operator[] (size_t index) const;
 
-    // Functions
+    // Accessor Functions
     std::vector<T> getPointVector() const;
 
     size_t getIndex() const;
 
     size_t getDimension() const;
 
+    // Serialization Function
     template<class Archive>
     void serialize(Archive & archive) {
 			archive(CEREAL_NVP(point_vect_), CEREAL_NVP(index_));
     }
 
 };
+
+// Operator overloads for Point type
 
 template <typename T = double>
 bool operator== (const Point<T>& pt1, const Point<T>& pt2);
@@ -85,18 +91,24 @@ Point<T> operator* (const Point<T>& pt1, const Point<T>& pt2);
 template <typename T = double>
 Point<T> operator/ (const Point<T>& pt1, const Point<T>& pt2);
 
+// Element-wise minimum of two Points
 template <typename T = double>
 Point<T> elemwiseMin (const Point<T>& pt1, const Point<T>& pt2);
 
+// Element-wise maximum of two Points
 template <typename T = double>
 Point<T> elemwiseMax (const Point<T>& pt1, const Point<T>& pt2);
 
+// Euclidean distance between two Points
 template <typename T = double>
 T getDistance(const Point<T>& pt1, const Point<T>& pt2);
 
+// Properties of a set of Points for each dimension
+// Output parameters are {min, max, range, mean, variance};
 template <typename T = double>
 std::vector<Point<T>> getDistributionParams(const std::vector<Point<T>*>& data);
 
+// Calculates the approximate median using binapprox algorithm
 template <typename T = double>
 T getApproxMedian(const std::vector<Point<T>*>& data, const size_t& split_axis,
                          const Point<T>& data_mean, const Point<T>& data_variance);
@@ -105,6 +117,3 @@ T getApproxMedian(const std::vector<Point<T>*>& data, const size_t& split_axis,
 #include "kd_math.cpp"
 
 #endif // KD_MATH_H_ //
-
-
-
