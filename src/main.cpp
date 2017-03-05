@@ -25,7 +25,7 @@
 #include "kd_math.h"
 #include "kd_tree.h"
 #include "file_handler.h"
-#include "nn_Test.cpp"
+#include "nn_test.cpp"
 
 using namespace std;
 
