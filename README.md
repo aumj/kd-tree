@@ -46,6 +46,6 @@ Output files "query_results.csv" and "query_results_truth.csv" are generated.
 
 3. Help:
 ```shell
-	$ ./KDTree --help
+$ ./KDTree --help
 ```
 Usage instructions can be viewed here.
