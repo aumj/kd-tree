@@ -44,7 +44,6 @@ vector<Point<T>*> FileHandler<T>::csvReadInput(const string& file_name) {
     while (input_file.good() && !input_file.eof()) {
        if (!getline(input_file, line))
            continue;
-        getline(input_file, line);
         stringstream lineStream(line);
         string cell;
 
