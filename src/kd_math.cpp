@@ -69,12 +69,12 @@ typename Point<T>::const_iterator Point<T>::begin() const{
 
 template <typename T>
 typename Point<T>::iterator Point<T>::end() {
-    return  (begin() + getDimension());
+    return  (begin() + getDimension()-1);
 }
 
 template <typename T>
 typename Point<T>::const_iterator Point<T>::end() const {
-    return  (begin() + getDimension());
+    return  (begin() + getDimension()-1);
 }
 
 template <typename T>
